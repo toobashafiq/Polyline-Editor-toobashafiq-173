@@ -1,208 +1,84 @@
-NAME TOOBA SHAFIQ
-
-SEAT NO:B23110006173
-
-BATCH:BSCS-IIIB
 
 Polyline Editor
 
-Phase 1: Requirements
+Name: Tooba Shafiq
+Seat No: B23110006173
+Batch: BSCS-IIIB
 
-1. System Overview
 
-The Polyline Editor is an application that allows users to create, edit, and manipulate drawings composed of multiple polylines using mouse and keyboard interactions.
+Overview
 
-The system supports direct manipulation, where:
+Polyline Editor is an interactive application that allows users to create and manipulate polylines using mouse and keyboard. Users can add, move, delete, and insert points while receiving real-time visual feedback. The system maintains an internal model that stays consistent with the displayed drawing.
 
-•	Users add points to construct shapes.
 
-•	Users move points through dragging.
+Features
 
-•	Users delete points, with automatic reconnection of line segments.
+Create new polyline (b)
 
-•	Users can insert points inside existing polylines.
+Add points using mouse clicks
 
-•	Users can undo or redo previous actions.
+Move vertices (m) with drag support
 
-The interaction is continuous and incremental until the desired drawing is completed.
+Delete vertices (d) with automatic reconnection
 
-The system provides continuous visual feedback and maintains an internal model consistent with the display.
+Insert vertices on segments (i)
 
-2. Functional Requirements
+Undo / Redo actions (u, y, Ctrl+Z, Ctrl+Y)
 
-2.1 Begin Mode (‘b’) – Create New Polyline
+Save and load drawings using JSON (s, l)
 
-•	User enters command mode via keyboard (b).
+Refresh canvas (r)
 
-•	System creates a new polyline object and allocates it in polys[].
+Clear all polylines (q)
 
-•	System enters construction state.
 
-•	User can add points using mouse clicks.
 
-2.2 Add Points – Mouse Click
+User Interaction
 
-•	Input: Mouse click event.
+Mouse:
 
-•	Processing: System captures (x, y) coordinates, creates a new vertex, and connects it to the previous point.
+Click → add points
 
-•	Output: Shape gradually forms as points are added.
+Drag → move points
 
-2.3 Move Mode (‘m’) – Move a Point
+Click near segment → insert point
 
-•	User presses m.
 
-•	System performs nearest-neighbor selection to detect closest vertex.
+Keyboard:
 
-•	Selected vertex becomes draggable.
+b → Begin new polyline
 
-•	While dragging:
+m → Move mode
 
-o	Coordinates update continuously.
+d → Delete mode
 
-o	Shape redraws in real time.
+i → Insert mode
 
-•	On release: old lines are erased, new lines are drawn, updating the polyline structure and history.
+r → Refresh
 
-2.4 Delete Mode (‘d’) – Delete a Point
+s → Save
 
-•	User presses d.
+l → Load
 
-•	System identifies nearest vertex.
+q → Quit/Clear
 
-•	Selected vertex is removed, connected segments erased.
+u / Ctrl+Z → Undo
 
-•	Remaining endpoints are reconnected, maintaining polyline topology.
+y / Ctrl+Y → Redo
 
-•	Action is saved in history for undo.
 
-2.5 Insert Mode (‘i’) – Insert a Point
 
-•	User presses i.
+Data Structure
 
-•	System identifies nearest segment within a selection buffer.
+polys[] → Stores up to 100 polylines
 
-•	New vertex is inserted on that segment, updating the polyline.
+Each polyline → Ordered list of vertices {x, y}
 
-2.6 Undo / Redo
+History stacks → Used for Undo/Redo operations
 
-•	Undo: Reverts to previous polyline state (Ctrl+Z / u).
 
-•	Redo: Re-applies next state (Ctrl+Y / Ctrl+Shift+Z / y).
 
-•	History is maintained in a stack-based data structure.
+Conclusion
 
-2.7 Refresh (‘r’) – Screen Redraw
-
-•	Clears rendering buffer and canvas.
-
-•	Redraws all stored polylines from the internal model.
-
-2.8 Save / Load
-
-•	Save: Exports current polylines to a JSON file (s key).
-
-•	Load: Loads previously saved JSON, replacing editor data (l key).
-
-2.9 Quit / Clear (‘q’)
-
-•	Clears all polylines from canvas after confirmation.
-
-•	Optionally terminates the session.
-
-2.10 Polyline Storage
-
-•	Supports up to 100 polylines stored in polys[].
-
-•	Each polyline is an ordered list of vertices {x, y}.
-
-•	Internal model updates dynamically on add, move, delete, or insert.
-
-3. User Interaction Requirements
-
-•	Mouse: Add points, select nearest vertex, drag points, insert points.
-
-•	Keyboard: Switch modes (b, m, d, i, r, q), Undo/Redo (u, y, Ctrl+Z/Ctrl+Y).
-
-•	System must:
-
-o	Accurately detect nearest vertex or segment.
-
-o	Provide visual feedback for current mode and selected vertex.
-
-o	Maintain internal model consistency.
-
-4. Data Requirements
-
-•	Data Structure:
-
-polys[100] → collection of polyline objects
-
-polyline → ordered list of vertices {x: float, y: float}
-
-vertex → {x, y}
-
-•	History stacks for Undo/Redo.
-
-•	Each vertex stores coordinates {x, y}.
-
-5. Input → Processing → Output
-
-Action	Input	Processing	Output
-
-Begin	b key	Create new polyline	New polyline started
-
-Add Point	Mouse click	Add vertex + connect line	Shape grows
-
-Move	Mouse drag	Find nearest vertex + update	Shape modified
-
-Delete	Mouse click	Remove vertex + reconnect	Shape updated
-
-Insert	Mouse click near segment	Insert vertex	Shape updated
-
-Undo	Ctrl+Z / u	Revert history	Previous state restored
-
-Redo	Ctrl+Y / y	Reapply history	Next state restored
-
-Refresh	r key	Clear + redraw	Updated display
-
-Save	s key	Export JSON	File saved
-
-Load	l key	Load JSON	Canvas updated
-
-Quit / Clear	q key	Clear all polylines	Canvas empty
-
-6. Scenario 
-
-1.	Press b → start new polyline → click points to draw house.
-
-2.	Press m → select vertex → drag to adjust roof.
-
-3.	Press d → delete incorrect vertex → system reconnects lines.
-
-4.	Press i → click segment → insert vertex for finer control.
-
-5.	Undo with u or Ctrl+Z → revert last insert.
-
-6.	Redo with y or Ctrl+Y → reapply last insert.
-
-7.	Save with s → export JSON file.
-
-8.	Load with l → load saved shape.
-
-9.	Refresh with r → redraw canvas.
-
-10.	Quit/Clear with q → confirm to clear all polylines.
-
-7. Conclusion
-
-•	Focused on user-centered interaction and system behavior.
-
-•	All functional and optional features are included.
-
-•	Supports error recovery, history management, and persistent storage.
-
-•	Internal data structure ensures efficient editing and visual consistency.
-
-
+The Polyline Editor provides an efficient and user-friendly way to create and edit vector drawings. It supports real-time updates, history management, and persistent storage while maintaining consistency between the internal model and the visual output.
 
